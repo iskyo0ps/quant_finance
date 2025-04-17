@@ -6,52 +6,52 @@ economic_states = {
 }
 
 
-import yfinance as yf
+import os
 import pandas as pd
+import yfinance as yf
 import riskfolio as rp
 
-# 获取宏观经济数据（示例：中美10年期国债利差）
-macro_data = yf.download(['^FVX', '^TNX'], start='2010-01-01')['Adj Close']
-debt_spread = macro_data['^TNX'] - macro_data['^FVX']  # 美债-中债利差
-
-# 债务周期判断函数
-def debt_cycle_phase(gdp_growth, credit_growth):
-    if credit_growth > gdp_growth * 1.5:
-        return "债务扩张期"
-    elif credit_growth < gdp_growth * 0.8:
-        return "债务收缩期"
+# Function to load data from local or download if not available
+def load_or_download_data(filename, tickers, start=None, end=None, period=None):
+    if os.path.exists(filename):
+        print(f"Loading data from local file: {filename}")
+        return pd.read_csv(filename, index_col=0, parse_dates=True)
     else:
-        return "平衡期"
-    
+        print(f"Downloading data for: {tickers}")
+        if period:
+            data = yf.download(tickers, period=period)['Adj Close']
+        else:
+            data = yf.download(tickers, start=start, end=end)['Adj Close']
+        data.to_csv(filename)
+        return data
+
+# 获取宏观经济数据（示例：中美30年期国债利差）
+macro_data_file = 'macro_data.csv'
+macro_data = load_or_download_data(macro_data_file, ['^FVX', '^TNX'], start='1995-01-01')
+
+# 计算美债-中债利差
+debt_spread_file = 'debt_spread.csv'
+if os.path.exists(debt_spread_file):
+    print(f"Loading debt spread from local file: {debt_spread_file}")
+    debt_spread = pd.read_csv(debt_spread_file, index_col=0, parse_dates=True)
+else:
+    debt_spread = macro_data['^TNX'] - macro_data['^FVX']  # 美债-中债利差
+    debt_spread.to_csv(debt_spread_file)
+
 # 配置四大类资产
-assets = ['SPY', 'TLT', 'GLD', 'GSG']  # 美股/美债/黄金/大宗商品
-returns = yf.download(assets, period='5y')['Adj Close'].pct_change().dropna()
+assets = ['SPY', 'TLT', 'GLD', 'GSG']
+returns_file = 'asset_returns.csv'
+returns = load_or_download_data(returns_file, assets, period='30y').pct_change().dropna()
 
 # 风险平价优化
 port = rp.Portfolio(returns=returns)
-port.assets_stats(method_cov='hist', d=0.94)  # 使用EWMA协方差
+port.assets_stats(method_cov='hist', d=0.94)  # 使用EWMA协方差矩阵
 port.rp_optimization(obj='RiskParity', rf=0, hist=True)
 print(port.optimized_weights)
 
-
-def bubble_detector(stock):
-    data = yf.download(stock, period='3y')
-    # 计算六大指标
-    metrics = {
-        '估值分位': data['Close'].rolling(250).quantile(0.8),
-        '散户杠杆': (data['Volume'] * data['Close']).pct_change(21),
-        '期权看涨比': None,  # 需接入期权数据API
-        'IPO热度': len(yf.Ticker(stock).calendar),  # 示例简化
-        '资本支出偏离': data['Close'].diff(60) / data['Close'].shift(60) - data['Volume'].pct_change(60)
-    }
-    return pd.DataFrame(metrics)
-
-from pypfopt import HRPOpt
-import yfinance as yf
-
 # 获取多资产数据（含股债商品）
-assets = ["SPY", "TLT", "GLD", "GSG"]
-prices = yf.download(assets, start="2020-01-01", end="2025-04-01")["Adj Close"]
+prices_file = 'prices.csv'
+prices = load_or_download_data(prices_file, assets, start="1995-01-01", end="2025-04-18")
 
 # 创建HRP优化器
 hrp = HRPOpt(returns=prices.pct_change().dropna())
@@ -95,6 +95,10 @@ def dynamic_risk_budget(returns):
     recent_vol = returns.iloc[-60:].std()
     return recent_vol / recent_vol.sum()
 
+from pypfopt import RiskParityPortfolio
+from pypfopt.hierarchical_portfolio import HRPOpt
+
+
 # 应用时变风险预算
 hrp = HRPOpt(returns)
 hrp.optimize(risk_budget=dynamic_risk_budget(hrp.returns))
@@ -104,7 +108,7 @@ hrp.optimize(risk_budget=dynamic_risk_budget(hrp.returns))
 perf = hrp.portfolio_performance(verbose=True)
 
 # 与传统方法对比
-from pypfopt import RiskParityPortfolio
+
 rp = RiskParityPortfolio(cov_matrix=cov_matrix)
 rp.optimize()
 print("传统风险平价:", rp.weights)
