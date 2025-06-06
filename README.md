@@ -1,7 +1,9 @@
 # quant_finance
 python version >=3.10
 
-学习怎么看财报，电话会议，剩下的都是次要的。
+学习怎么看财报，快速阅读电话会议，剩下的都是次要的。
+
+https://www.bilibili.com/video/BV17T4y1C7za/?spm_id_from=333.337.search-card.all.click&vd_source=1221087bdfb55490ea89f7c5edefb5ae
 
 希腊字母含义
 
