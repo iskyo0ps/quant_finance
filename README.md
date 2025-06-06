@@ -3,9 +3,11 @@ python version >=3.10
 
 学习怎么看财报，快速阅读电话会议，剩下的都是次要的。
 
+https://www.bilibili.com/video/BV1824y1h7Pb?spm_id_from=333.788.recommend_more_video.11&vd_source=1221087bdfb55490ea89f7c5edefb5ae
+
 https://www.bilibili.com/video/BV12E411n7UY/?spm_id_from=333.337.search-card.all.click&vd_source=1221087bdfb55490ea89f7c5edefb5ae
 
-[https://www.bilibili.com/video/BV17T4y1C7za/?spm_id_from=333.337.search-card.all.click&vd_source=1221087bdfb55490ea89f7c5edefb5ae](https://www.bilibili.com/video/BV17T4y1C7za?spm_id_from=333.788.videopod.episodes&vd_source=1221087bdfb55490ea89f7c5edefb5ae&p=2)
+https://www.bilibili.com/video/BV17T4y1C7za?spm_id_from=333.788.videopod.episodes&vd_source=1221087bdfb55490ea89f7c5edefb5ae&p=2
 
 希腊字母含义
 
