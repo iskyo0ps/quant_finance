@@ -3,18 +3,17 @@ python version >=3.10
 
 学习怎么看财报，电话会议，剩下的都是次要的。
 
-视频学习资料
-
-期权
-
 希腊字母含义
+
 https://www.bilibili.com/video/BV1hJ411G7y3/?spm_id_from=333.788.player.switch&p=6&vd_source=1221087bdfb55490ea89f7c5edefb5ae
 
 期权策略
+
 https://www.bilibili.com/video/BV1bE41147j2?spm_id_from=333.788.recommend_more_video.0&vd_source=1221087bdfb55490ea89f7c5edefb5ae
 
 
 中国期权市场有效吗？
+
 https://www.bilibili.com/video/BV13g411R7ai/?spm_id_from=333.337.search-card.all.click&vd_source=1221087bdfb55490ea89f7c5edefb5ae
 
 
@@ -26,14 +25,18 @@ https://space.bilibili.com/389455044/lists/228946?type=season
 
 
 交易工具及api
+
 https://github.com/shidenggui/easytrader
 
 https://pypi.org/project/yfinance/
 
 券商app
+
 IBKR，thinkorswim，schwab
+
 Tiger, futu，momo，longbridge
 
 期权app 
+
 Tradingview，OptionStrat, Unusual whales
 
